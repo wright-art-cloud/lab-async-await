@@ -1,10 +1,12 @@
 // script.js
 
+// Attach event listener to the search form
 document.getElementById('search-form').addEventListener('submit', function (event) {
   event.preventDefault(); // stop page reload
 
   const word = document.getElementById('search-input').value.trim();
   if (word) {
+    console.log('Searching for:', word); 
     fetchWordData(word);
   } else {
     alert('Please enter a word to search.');
@@ -14,20 +16,25 @@ document.getElementById('search-form').addEventListener('submit', function (even
 function fetchWordData(word) {
   const resultsDiv = document.getElementById('results');
   resultsDiv.innerHTML = 'Loading...';
-}
-  fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/`)
+
+  fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`)
     .then(response => {
+      console.log('Fetch response:', response);
       if (!response.ok) {
         throw new Error('Word not found');
       }
       return response.json();
     })
     .then(data => {
+      console.log("API data:", data);
       displayWordData(data[0]); // pass first result
     })
     .catch(error => {
+      console.error('Error fetching word:', error);
       resultsDiv.innerHTML = `<p style="color:red;">${error.message}</p>`;
     });
+}
+
 function displayWordData(wordData) {
   const resultsDiv = document.getElementById('results');
   resultsDiv.innerHTML = "";
@@ -68,28 +75,20 @@ function displayWordData(wordData) {
     });
   });
 
-  // Save searched word to history list
+  // --- Saved words list ---
   const postList = document.getElementById('post-list');
-  const li = document.createElement('li');
-  li.textContent = word;
-  postList.appendChild(li);
+
+  // Check if word already exists
+  let existing = Array.from(postList.children).find(li => li.textContent === word);
+  if (!existing) {
+    const li = document.createElement('li');
+    li.textContent = word;
+
+    // Allow clicking to re-search
+    li.addEventListener('click', () => {
+      fetchWordData(word);
+    });
+
+    postList.appendChild(li);
+  }
 }
-
-//--- Saved Word List ---
-const postList = document.getElementById('post-list');
-
-//Check if word already exists
-let existing = Array.from(postList.children).some(li => li.textContent === word);
-if (!existing) {
-  const li = document.createElement('li');
-  li.textContent = word;
- 
- //Allow user to click on saved word to search again
-  li.addEventListener('click', () => {
-    fetchWordData(word);
-  });
-
-  postList.appendChild(li);
-}
-
- 
