@@ -1,11 +1,19 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
+    <meta charset="UTF-8" >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wordly Dictionary</title>
     <link rel="stylesheet" href="style.css">
-    <script type="text/javascript" defer src="index.js"></script>
   </head>
   <body>
-    <header> Flatbook </header>
+    <h1>Wordly Dictionary</h1>
+    <form id="search-form">
+      <input type="text" id="search-input" placeholder="Search for a word...">
+      <button type="submit">Search</button>
+    </form>
+<div id="results"></div>
+    <script src="script.js"></script>
     <ul id = 'post-list'>
     </ul>
   </body>
