@@ -1,3 +1,4 @@
+const expect = require('chai').expect;
 const fs = require('fs');
 const path = require('path');
 const { JSDOM } = require('jsdom');
